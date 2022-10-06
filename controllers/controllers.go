@@ -16,7 +16,7 @@ func CreateScore(c *gin.Context) {
 		return
 	}
 	database.DB.Create(&input)
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusCreated, gin.H{
 		"status": "Score lançado com sucesso!"})
 }
 
@@ -38,31 +38,31 @@ func GetScoreId(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, score)
-	
+
 }
 
 func GetScoreCpf(c *gin.Context) {
 	var score models.Score
 
 	cpf := c.Param("cpf")
-	database.DB.Where(&models.Score{Cpf:cpf}).First(&score)
+	database.DB.Where(&models.Score{Cpf: cpf}).First(&score)
 	if score.Cpf == "" {
 		c.JSON(http.StatusNotFound, gin.H{
-			"status":"CPF não encontrado"})
-			return	
-		}
+			"status": "CPF não encontrado"})
+		return
+	}
 	c.JSON(http.StatusOK, score)
 
 }
 
-func DeleteScore(c *gin.Context){
+func DeleteScore(c *gin.Context) {
 	var score models.Score
 	id := c.Params.ByName("id")
 	database.DB.First(&score, id)
 	if score.ID == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"status":"Score não encontrado!"})
+		c.JSON(http.StatusNotFound, gin.H{"status": "Score não encontrado!"})
 	}
 	database.DB.Delete(&score, id)
-	c.JSON(http.StatusOK, gin.H{"status":"Score deletado com sucesso!"})
+	c.JSON(http.StatusOK, gin.H{"status": "Score deletado com sucesso!"})
 
 }
